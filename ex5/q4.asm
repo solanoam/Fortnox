@@ -2,7 +2,7 @@
 .stack 0400h
 .data
    Old_int_off dw 00h
-   Old_int_seg dw 00h
+   Old_int_seg dw 00h 
    minCounter dw 00h
    secCounter dw 00h
    msCounter dw 00h
