@@ -4,10 +4,10 @@
    Old_int_off dw 00h
    Old_int_seg dw 00h
    minCounter dw 00h
-   secCounter dw 00h
-   msCounter dw 00h
-   msgCounter db 00h
-   msgSentence db 'Computers are good at following instructions, but not at reading your mind.' , 0dh , '$'
+   secCounter dw 00h ;seconds counter
+   msCounter dw 00h ;mSeconds counter
+   msgCounter db 00h ;counter for messege timer
+   msgSentence db 'Computers are good at following instructions, but not at reading your mind.' , 0dh , '$' ;the messege to print
    msgBlank db '                                                                           ' , 0dh , '$'
    .code
       Main:
@@ -30,7 +30,7 @@
          sti
          pop ds
          InfLoop:
-            mov ax, 010d
+            mov ax, 025d
             OneSecLoop:
                push cx
                xor cx,cx
@@ -42,12 +42,12 @@
                dec ax
                jnz OneSecLoop
             OneSecLoopEnd:
-            pop bx
             push ax
             push dx
-            xor ah, ah
+            xor ax, ax
             mov al, msgCounter
             inc ax
+            mov msgCounter, al
             mov dl, 010d
             div dl
             cmp ah, 0h
@@ -62,11 +62,9 @@
                mov ah, 09h
                mov dx, offset msgBlank
                int 21h
-               jmp BlinkMsgEnd
             BlinkMsgEnd:
-            mov msgCounter, al
-            pop ax
             pop dx
+            pop ax
             jmp InfLoop
          InfLoopEnd:
          mov ah, 04ch
