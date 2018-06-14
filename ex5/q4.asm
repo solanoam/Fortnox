@@ -40,7 +40,7 @@
                DeleyLoopEnd:
                pop cx
                dec ax
-               jnz OneMinuteLoop
+               jnz OneSecLoop
             OneSecLoopEnd:
             pop bx
             push ax
@@ -51,7 +51,7 @@
             mov dl, 010d
             div dl
             cmp ah, 0h
-            jz Blink
+            jz BlinkMsg
             PrintMsg:
                mov ah, 09h
                mov dx, offset msgSentence
