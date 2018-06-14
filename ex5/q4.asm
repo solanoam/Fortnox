@@ -30,8 +30,8 @@
          sti
          pop ds
          InfLoop:
+            mov ax, 010d
             OneSecLoop:
-               mov ax, 010d
                push cx
                xor cx,cx
                DeleyLoop:
