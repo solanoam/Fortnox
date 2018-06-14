@@ -6,6 +6,7 @@
    minCounter dw 00h
    secCounter dw 00h
    msCounter dw 00h
+   msgCounter db 00h
    msgSentence db 'Computers are good at following instructions, but not at reading your mind.' , 0dh , '$'
    msgBlank db '                                                                           ' , 0dh , '$'
    .code
@@ -21,8 +22,6 @@
          mov Old_int_off, bx
          mov ah, 025h
          mov dx, CodeToInject
-         ;int 21, ah = 25, al = 08, ds = cs, dx = offset CodeToInject
-         ;IVTi =
          push ds
          push cs
          pop ds
@@ -31,7 +30,43 @@
          sti
          pop ds
          InfLoop:
-            nop
+            OneSecLoop:
+               mov ax, 010d
+               push cx
+               xor cx,cx
+               DeleyLoop:
+                  nop
+                  loop DeleyLoop
+               DeleyLoopEnd:
+               pop cx
+               dec ax
+               jnz OneMinuteLoop
+            OneSecLoopEnd:
+            pop bx
+            push ax
+            push dx
+            xor ah, ah
+            mov al, msgCounter
+            inc ax
+            mov dl, 010d
+            div dl
+            cmp ah, 0h
+            jz Blink
+            PrintMsg:
+               mov ah, 09h
+               mov dx, offset msgSentence
+               int 21h
+               jmp BlinkMsgEnd
+            PrintMsgEnd:
+            BlinkMsg:
+               mov ah, 09h
+               mov dx, offset msgBlank
+               int 21h
+               jmp BlinkMsgEnd
+            BlinkMsgEnd:
+            mov msgCounter, al
+            pop ax
+            pop dx
             jmp InfLoop
          InfLoopEnd:
          mov ah, 04ch
