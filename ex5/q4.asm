@@ -2,7 +2,7 @@
 .stack 0400h
 .data
    Old_int_off dw 00h
-   Old_int_seg dw 00h 
+   Old_int_seg dw 00h
    minCounter dw 00h
    secCounter dw 00h
    msCounter dw 00h
@@ -50,31 +50,9 @@
             cmp ax, 01000d
             jb UpdateSecEnd
             UpdateSec:
-               push dx
-               push ax
-               push bx
-               inc bx
-               mov ax, bx
-               mov dl, 010d
-               div dl
-               cmp ah, 0h
-               jnz Sentence
-               Blink:
-                  mov dx, offset msgBlank
-                  mov ah, 09h
-                  int 021h
-                  jmp SentenceEnd
-               BlinkEnd:
-               Sentence:
-                  mov dx, offset msgSentence
-                  mov ah, 09h
-                  int 021h
-               SentenceEnd:
-               pop bx
-               pop ax
-               pop dx
                sub ax, 01000d
                inc bx
+               call InitScreenCounter
                cmp bx, 060d
                jnz UpdateMinEnd
                UpdateMin:
