@@ -124,8 +124,6 @@
                ;update new value
                sub ax, 01000d
                inc bx
-               ;correct an error when using only two digits of the timer
-               call InitScreenCounter
                ;cheking if there is carry
                cmp bx, 060d
                jnz UpdateMinEnd
@@ -146,6 +144,8 @@
             mov msCounter, ax
             mov secCounter, bx
             mov minCounter, cx
+            ;correct an error when using only two digits of the timer
+            call InitScreenCounter
             ;printing each counter to the timer
             mov di, 09eh
             call PrintRegInDec
