@@ -6,6 +6,7 @@
    Old_int_off dw 00h
    ;name suggestet in the instructions, store to segment for the original 08h interrupt
    Old_int_seg dw 00h
+   ;min counter
    minCounter dw 00h
    ;seconds counter
    secCounter dw 00h
@@ -95,8 +96,6 @@
             ;continue infinite loop
             jmp InfLoop
          InfLoopEnd:
-         mov ah, 04ch
-         int 021h
 
          ;injected code funtction - this code is being injected to int 08, and call the original interrupt,
          ;then, uses logic to print out a timer that is updated every 55ms
@@ -238,7 +237,7 @@
                 cmp ax, 0h
                 jnz SplitDig
              SplitDigEnd:
-             ;restoring values
+             ;restoring values©©
              pop di
              pop cx
              pop dx
