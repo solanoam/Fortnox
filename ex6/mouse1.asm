@@ -1,16 +1,20 @@
 .model small
 .stack 100h
 .data
-   public devider equ 8h  ;for mouse position
-   public txtGreen db 'GREEN*$'
-   public txtBlue db 'BLUE@$'
-   public txtWhite db 'WHITE#$'
-   public txtExit db 'EXIT$'
+   public txtGreen
+   public txtBlue
+   public txtWhite
+   public txtExit
+   txtGreen db 'GREEN*$'
+   txtBlue db 'BLUE@$'
+   txtWhite db 'WHITE#$'
+   txtExit db 'EXIT$'
+
 .code
-   extern textsPrint
-   extren mouseFollow
-   extren setToVideo
-   extren chkMousePos
+   extern textsPrint:near
+   extern mouseFollow:near
+   extern setToVideo:near
+   extern chkMousePos:near
 
    Main:
       mov ax, @data
