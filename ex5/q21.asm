@@ -7,28 +7,27 @@ out_msg db '* ','$'
    Start:
       mov ax, @data ;set data segment
       mov ds, ax
-      mov bx, 05d
-      mov cx, 0
+      mov bx, 05d ;for the 5 seconds check
+      mov cx, 0 ;set start point to 0
 
    PollClock:
-      mov ax, 0
-      mov al, 00h
-      out 70h, al
+      mov ax, 0 ;reset ax in each itaration
+      out 70h, al ;RTC      
       in al, 71h
-      div bl
-      cmp ah, 0
-      jz PRINT
-      jmp PollClock
+      div bl 
+      cmp ah, 0 ;check if 5 seconds past since 
+      jz PRINT ;go to print function if needed
+      jmp PollClock ; else, continue the infinite loop
 
    PRINT:
-      cmp ax, cx
-      jz PollClock
-      mov cx, ax
+      cmp ax, cx ;check if a star was already printed at the current second
+      jz PollClock ;if it did, don't print and go back to the loop
+      mov cx, ax ;if it didn't save the new second it was printed at
       mov dx, offset out_msg ;print "*" if you should
       mov ah,9
       int 21h
-      jmp PollClock
+      jmp PollClock ;go back to the infinite loop
 
-mov ah,4ch
+mov ah,4ch ;return to OS
 int 21h
 end Start

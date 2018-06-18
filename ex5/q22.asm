@@ -2,7 +2,7 @@
 .stack 100h
 .data
 out_msg db '* ','$'
-
+;same code as before
 .code
 HERE:
 mov ax, @data ;set data segment
@@ -12,11 +12,10 @@ mov cx, 0
 
 PollClock:
 mov ax, 0
-
 mov al, 0ah
 out 70h, al
-in al, 71h
-test al, 10000000b
+in al, 71h 
+test al, 10000000b ;check if the value is ready
 jz PollClock
 
 mov al, 00h
