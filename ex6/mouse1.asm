@@ -5,10 +5,13 @@
    public txtBlue
    public txtWhite
    public txtExit
+   public curColor
    txtGreen db 'GREEN*$'
    txtBlue db 'BLUE@$'
    txtWhite db 'WHITE#$'
    txtExit db 'EXIT$'
+   curColor db 0001b
+
 
 .code
    extern textsPrint:near
