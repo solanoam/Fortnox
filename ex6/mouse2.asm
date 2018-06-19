@@ -7,6 +7,7 @@
    extern txtBlue:byte
    extern txtWhite:byte
    extern txtExit:byte
+   extern curColor:byte
    public textsPrint
    public mouseFollow
    public setToVideo
@@ -18,13 +19,13 @@
    ;OUT:
    ;cx - colum pos of curser
    ;dx - row pos of curser
-   mouseFollow proc near uses ax di
+   mouseFollow proc near uses ax
       mov ax, 03h
       int 33h
       shr cx,1
-      shr dx,1
-      mov ax, di
-      mov ah, 00h
+      ;shr dx,1
+      mov al, curColor
+      mov ah, 0ch
       int 10h
       ret
    mouseFollow endp
@@ -47,15 +48,15 @@
          call exitProg
       exitPEnd:
       chgToGreen:
-          mov di, 0010b
+          mov curColor, 0010b
           jmp chgToWhiteEnd
       chgToGreenEnd:
       chgToBlue:
-          mov di, 0001b
+          mov curColor, 0001b
           jmp chgToWhiteEnd
        chgToBlueEnd:
        chgToWhite:
-          mov di, 1111b
+          mov curColor, 1111b
           jmp chgToWhiteEnd
        chgToWhiteEnd:
           ret
@@ -82,43 +83,44 @@
       ret
    setToNormal endp
 
-   textsPrint proc near
+   textsPrint proc near uses dx
       ;setting init curser
+      xor bh, bh
       xor dl, dl
-      call setCursorTop
+      xor dh, dh
+      mov ah, 02h
+      int 10h
       ;printing first txt
       mov dx, offset txtGreen
-      call printToScreen
+      mov ah, 09h
+      int 21h
       ;setting curser for second print
+      xor dh, dh
       mov dl, 06d
-      call setCursorTop
+      mov ah, 02h
+      int 10h
       ;printing second text
       mov dx, offset txtBlue
-      call printToScreen
+      mov ah, 09h
+      int 21h
       ;setting curser for third text
+      xor dh, dh
       mov dl, 011d
-      call setCursorTop
+      mov ah, 02h
+      int 10h
       ;printing third text
       mov dx, offset txtWhite
-      call printToScreen
+      mov ah, 0x9h
+      int 21h
       ;cursor for right text
+      xor dh, dh
       mov dl, 036d
-      call setCursorTop
+      mov ah, 02h
+      int 10h
       ;printing forth text
       mov dx, offset txtExit
+      mov ah, 09h
+      int 21h
       ret
    textsPrint endp
-
-   setCursorTop proc near uses dx, ax, bx
-      xor dh, dh
-      xor bh, bh
-      mov ah, 09h
-      int 10h
-      ret
-   setCursorTop endp
-
-   printToScreen using ax
-      mov ah, 09
-      int 21
-      ret
-   printToScreen endp
+end
