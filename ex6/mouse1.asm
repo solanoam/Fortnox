@@ -5,10 +5,19 @@
    public txtBlue
    public txtWhite
    public txtExit
+   public curColor
+   public curShape
+   public prevMousePosC
+   public prevMousePosD
    txtGreen db 'GREEN*$'
    txtBlue db 'BLUE@$'
    txtWhite db 'WHITE#$'
    txtExit db 'EXIT$'
+   curColor db 0001b
+   prevMousePosC dw 00h
+   prevMousePosD dw 00h
+   curShape db '.'
+
 
 .code
    extern textsPrint:near

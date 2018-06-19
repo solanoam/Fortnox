@@ -8,6 +8,10 @@
    extern txtWhite:byte
    extern txtExit:byte
    extern curColor:byte
+   extern curShape:byte
+   extern prevMousePosC:byte
+   extern prevMousePosD:byte
+   extern blankMsg:byte
    public textsPrint
    public mouseFollow
    public setToVideo
@@ -21,12 +25,58 @@
    ;dx - row pos of curser
    mouseFollow proc near uses ax
       mov ax, 03h
-      int 33h
-      shr cx,1
-      ;shr dx,1
+      int 033h
+      shr cx, 1
       mov al, curColor
       mov ah, 0ch
       int 10h
+
+      push dx
+      push cx
+
+      shr dx, 1
+      shr dx, 1
+      shr dx, 1
+      shr cx, 1
+      shr cx, 1
+      shr cx, 1
+
+      ;cmp prevMousePosC, cl
+      ;jz contChkPos
+
+      ;mov prevMousePosC, cx
+      ;contChkPos:
+      ;cmp prevMousePosD, dx
+      ;jz endChk
+      ;mov prevMousePosD, dx
+      ;endChk:
+
+      ;change cursor position to mouse position
+
+      mov bh, 0h
+      mov dh, dl
+      mov dl, cl
+      mov ah, 02h
+      int 010h
+
+
+      ;print at cursor position
+      mov ah, 09h
+      mov al, curShape
+      mov cx, 01h
+      mov bh, 0h
+      mov bl, curColor
+      int 010h
+
+      mov ah, 09h
+      mov al, ' '
+      mov cx, 01h
+      mov bh, 0h
+      mov bl, curColor
+      int 010h
+
+      pop cx
+      pop dx
       ret
    mouseFollow endp
 
@@ -49,14 +99,17 @@
       exitPEnd:
       chgToGreen:
           mov curColor, 0010b
+          mov curShape, '*'
           jmp chgToWhiteEnd
       chgToGreenEnd:
       chgToBlue:
           mov curColor, 0001b
+          mov curShape, '@'
           jmp chgToWhiteEnd
        chgToBlueEnd:
        chgToWhite:
           mov curColor, 1111b
+          mov curShape, '#'
           jmp chgToWhiteEnd
        chgToWhiteEnd:
           ret
@@ -110,7 +163,7 @@
       int 10h
       ;printing third text
       mov dx, offset txtWhite
-      mov ah, 0x9h
+      mov ah, 09h
       int 21h
       ;cursor for right text
       xor dh, dh
