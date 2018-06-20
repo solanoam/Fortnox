@@ -1,0 +1,65 @@
+Microsoft (R) Macro Assembler Version 6.11		    06/20/18 17:40:41
+p1.asm							     Page 1 - 1
+
+
+				.model small
+ 0000				.data
+ 0000 2E41			    char dw 2E41h ;'A'
+				    public char
+ 0002 4D 79 20 73 74 72		    msg db 'My string$'
+       69 6E 67 24
+				    public msg
+ 0000				.code
+ 0000  8B C3			    mov ax,bx
+ 0002				  L1:
+ 0002  8B C8			    mov cx,ax
+ 0004  EB 0F			    jmp L2
+ 0006				.code
+ 0006				HERE:
+ 0006  B8 ---- R		    mov ax, @data
+ 0009  8E D8			    mov ds, ax
+ 000B  B8 B800			    mov ax, 0B800h
+ 000E  8E C0			    mov es, ax
+				
+ 0010  EA ---- 0002 R		    jmp far ptr L1
+ 0015				L2:
+				    extern CONT:near
+ 0015  E9 0000 E		    jmp CONT
+				end HERE
+Microsoft (R) Macro Assembler Version 6.11		    06/20/18 17:40:41
+p1.asm							     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+DGROUP . . . . . . . . . . . . .	GROUP
+_DATA  . . . . . . . . . . . . .	16 Bit	 000C	  Word	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	16 Bit	 0018	  Word	  Public  'CODE'	
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 0000h	 
+@DataSize  . . . . . . . . . . .	Number	 0000h	 
+@Interface . . . . . . . . . . .	Number	 0000h	 
+@Model . . . . . . . . . . . . .	Number	 0002h	 
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 DGROUP
+@fardata?  . . . . . . . . . . .	Text   	 FAR_BSS
+@fardata . . . . . . . . . . . .	Text   	 FAR_DATA
+@stack . . . . . . . . . . . . .	Text   	 DGROUP
+CONT . . . . . . . . . . . . . .	L Near	 0000	  _TEXT	External
+HERE . . . . . . . . . . . . . .	L Near	 0006	  _TEXT	
+L1 . . . . . . . . . . . . . . .	L Near	 0002	  _TEXT	
+L2 . . . . . . . . . . . . . . .	L Near	 0015	  _TEXT	
+char . . . . . . . . . . . . . .	Word	 0000	  _DATA	Public
+msg  . . . . . . . . . . . . . .	Byte	 0002	  _DATA	Public
+
+	   0 Warnings
+	   0 Errors
