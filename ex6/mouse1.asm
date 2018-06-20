@@ -1,22 +1,25 @@
 .model small
 .stack 100h
 .data
-   public txtGreen
-   public txtBlue
-   public txtWhite
+   public txtColors
    public txtExit
    public curColor
    public curShape
+   public blankMsg
    public prevMousePosC
    public prevMousePosD
-   txtGreen db 'GREEN*$'
-   txtBlue db 'BLUE@$'
-   txtWhite db 'WHITE#$'
+   public newCurC
+   public newCurD
+   txtColors db 'GREEN*BLUE@WHITE#$'
    txtExit db 'EXIT$'
    curColor db 0001b
-   prevMousePosC dw 00h
-   prevMousePosD dw 00h
+   prevMousePosC db 00h
+   prevMousePosD db 00h
    curShape db '.'
+   blankMsg db ' '
+   newCurC db 00h
+   newCurD db 00h
+
 
 
 .code
@@ -24,6 +27,8 @@
    extern mouseFollow:near
    extern setToVideo:near
    extern chkMousePos:near
+   extern changeCurPos:near
+   extern prtAtCursor:near
 
    Main:
       mov ax, @data
