@@ -22,7 +22,8 @@
 *.rar
 *.tar
 *.zip
-
+*.lst
+*.map
 
 # Logs and databases #
 ######################
