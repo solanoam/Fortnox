@@ -5,36 +5,48 @@
 
 .code
    Main:
-      mov bx, ds
-      mov stringPtrSeg, bx
-      mov es, bx
-      xor bx, bx
-      mov ax, es:[bx]
-      cmp ax, 04d
+      ;setting PSP segment to es
+      mov ax, ds
+      mov es, ax
+      ;saving PSP seg for later storage
+      push ax
+      ;saving data segment
+      mov ax, @data
+      mov ds, ax
+      ;restoring PSP segment for storing in data segment
+      pop ax
+      mov stringPtrSeg, ax
+      ;set offset for length of attribute
+      mov bx, 080h
+      mov al, es:[bx]
+      ;check if the attribute is 4 chars length
+      xor ah, ah
+      cmp al, 05d
       jnz LegalModCondEnd
       LegalModCond:
-         mov bx, 01h
-         mov ax, es:[bx]
-         cmp ax, 'T'
+         ;initial offset for attribute
+         mov bx, 082h
+         mov al, es:[bx]
+         cmp al, 'T'
          jnz TimeModEnd
          TimeMod:
-            inc ax
-            mov bx, es[ax]
-            cmp bx, 'I'
+            inc bx
+            mov al, es:[bx]
+            cmp al, 'I'
             jnz LegalModCondEnd
             TimeMode50Per:
-               inc ax
-               mov bx, es[ax]
-               cmp bx, 'M'
+               inc bx
+               mov al, es:[bx]
+               cmp al, 'M'
                jnz LegalModCondEnd
                TimeMod75Per:
-                  inc ax
-                  mov bx, es[ax]
-                  cmp bx, 'E'
+                  inc bx
+                  mov al, es:[bx]
+                  cmp al, 'E'
                   jnz LegalModCondEnd
                   TimeModComp:
                      mov ah, 02ch
-                     int 21
+                     int 21h
                      mov al, ch
                      xor ah, ah
                      mov di, 0200h
@@ -44,28 +56,29 @@
                TimeMod75PerEnd:
             TimeMode50PerEnd:
          TimeModEnd:
-         mov ax, 01h
-         mov bx, es:[ax]
-         cmp bx, 'D'
+         mov bx, 082h
+         mov al, es:[bx]
+         cmp al, 'D'
          jnz DateModEnd
          DateMod:
-            inc ax
-            mov bx, es:[ax]
-            cmp bx, 'A'
+            inc bx
+            mov al, es:[bx]
+            cmp al, 'A'
             jnz LegalModCondEnd
             DateMod50Per:
-               inc ax
-               mov bx, es:[ax]
-               cmp bx, 'T'
+               inc bx
+               mov al, es:[bx]
+               cmp al, 'T'
                jnz LegalModCondEnd
                DateMod75Per:
-                  inc ax
-                  mov bx, es:[ax]
-                  cmp bx, 'E'
+                  inc bx
+                  mov al, es:[bx]
+                  cmp al, 'E'
                   jnz LegalModCondEnd
                   DateModComp:
                      mov ah, 02ah
-                     int 21
+                     int 21h
+                     inc al
                      xor ah, ah
                      mov di, 0200h
                      call PrintRegInDec
@@ -74,37 +87,35 @@
                DateMod75PerEnd:
             DateMod50PerEnd:
          DateModEnd:
-         mov ax, 01h
-         mov bx, es:[ax]
-         cmp bx, 'I'
+         mov bx, 082h
+         mov al, es:[bx]
+         cmp al, 'I'
          jnz LegalModCondEnd
          IntMod:
-            inc ax
-            mov bx, es:[ax]
-            cmp bx, 'N'
+            inc bx
+            mov al, es:[bx]
+            cmp al, 'N'
             jnz LegalModCondEnd
             IntMod50Per:
-               inc ax
-               mov bx, es:[ax]
-               cmp bx, 'T'
+               inc bx
+               mov al, es:[bx]
+               cmp al, 'T'
                jnz LegalModCondEnd
                IntMod75Per:
-                  inc ax
-                  mov bx, es:[ax]
-                  cmp bx, 030h
+                  inc bx
+                  mov al, es:[bx]
+                  sub al, 030h
                   jb LegalModCondEnd
-                  cmp bx, 039h
+                  cmp al, 09h
                   ja LegalModCondEnd
                   IntModComp:
-                     sub bx, 30h
-                     mov ax, bx
                      mov ah, 035h
                      int 021h
                      mov ax, bx
                      mov di, 0200h
                      call PrintRegInDec
                      mov ax, es
-                     mov di, 0106h
+                     mov di, 01f4h
                      call PrintRegInDec
                   IntModCompEnd:
                IntMod75PerEnd:
@@ -112,7 +123,7 @@
          IntModEnd:
       LegalModCondEnd:
       mov ah ,04ch
-      int 21
+      int 21h
 
       PrintRegInDec proc near uses ax bx dx cx di
           ;set screen segment
