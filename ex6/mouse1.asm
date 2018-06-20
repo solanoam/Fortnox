@@ -12,10 +12,10 @@
    public newCurD
    txtColors db 'GREEN*BLUE@WHITE#$'
    txtExit db 'EXIT$'
-   curColor db 0001b
+   curColor db 1111b
    prevMousePosC db 00h
    prevMousePosD db 00h
-   curShape db '.'
+   curShape db ' '
    blankMsg db ' '
    newCurC db 00h
    newCurD db 00h

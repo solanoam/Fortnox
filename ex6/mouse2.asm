@@ -65,10 +65,12 @@
           mov newCurC, bl
           mov bl, prevMousePosD
           mov newCurD, bl
-          pop bx
+          mov bl, curShape
           mov curShape, ' '
           call changeCurPos
           call prtAtCursor
+          mov curShape, bl
+          pop bx
           mov prevMousePosC, cl
           mov prevMousePosD, dl
         ChangeDEnd:
